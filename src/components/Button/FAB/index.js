@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
+import {View, StyleSheet, Pressable, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import {BEIGE, TALC_BLUE, TEXT_COLOR_DARK} from '../../../constants/colors';
 import CustomText from '../../CustomText';
@@ -8,7 +8,7 @@ import CustomText from '../../CustomText';
 const FAB = ({title, onPress, style, textStyle, ...props}) => {
   return (
     <View style={styles.parent}>
-      <Pressable style={styles.container}>
+      <Pressable style={styles.container} onPress={onPress} activeOpacity={0.7}>
         <CustomText.SubHeader style={{color: BEIGE, fontSize: 18}}>
           {title}
         </CustomText.SubHeader>

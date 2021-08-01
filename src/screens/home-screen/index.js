@@ -42,7 +42,7 @@ const HomeScreen = ({navigation}) => {
     let filteredArray;
 
     if (keyword === null || keyword?.trim() === '') {
-      filteredArray = [];
+      filteredArray = CAT_ARRAY;
     } else {
       filteredArray = CAT_ARRAY.filter(
         item => item.catName.includes(keyword) || item.breed.includes(keyword),
@@ -57,11 +57,14 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <BlankPage>
-      {catArray.length === 0 ? (
+      {CAT_ARRAY.length === 0 ? (
         <EmptyList navigation={navigation} />
       ) : (
         <View style={styles.container}>
-          <Button.FAB title={'Add a cat 😻'} />
+          <Button.FAB
+            title={'Add a cat 😻'}
+            onPress={() => navigation.navigate('FormScreen')}
+          />
 
           <FlatList
             numColumns={2}

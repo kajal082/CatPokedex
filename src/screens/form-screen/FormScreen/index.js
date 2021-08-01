@@ -8,7 +8,7 @@ import {BEIGE} from '../../../constants/colors';
 import TextField from '../../../components/TextField';
 import Button from '../../../components/Button';
 
-const FormScreen = () => {
+const FormScreen = ({navigation}) => {
   return (
     <BlankPage>
       <View style={styles.parent}>
@@ -40,6 +40,7 @@ const FormScreen = () => {
         </View>
         <View style={styles.buttonBar}>
           <Button title={'Add'} />
+          <Button title={'back'} onPress={() => navigation.goBack()} />
         </View>
       </View>
     </BlankPage>
