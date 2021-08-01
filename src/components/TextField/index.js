@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   textInputStyle: {
-    height: 28,
+    height: 37,
   },
   titleStyle: {
     marginBottom: 8,

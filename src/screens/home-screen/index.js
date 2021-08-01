@@ -20,6 +20,9 @@ import SearchBar from '../../components/SearchBar/index.js';
 import Button from '../../components/Button/index.js';
 import EmptyList from './components/EmptyList/index.js';
 import BlankPage from '../../components/BlankPage/index.js';
+import {useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import {ADD_CAT_DETAILS} from '../../constants/actions/index.js';
 
 const Header = ({onSearch}) => {
   return (
@@ -37,14 +40,35 @@ const Header = ({onSearch}) => {
 const HomeScreen = ({navigation}) => {
   const [catArray, setCatArray] = useState([]);
   const [keyword, setKeyword] = useState(null);
+  const state = useSelector(state => state);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    AsyncStorage.getItem('localCatList').then(res => {
+      if (res) {
+        let data = JSON.parse(res);
+
+        setCatArray(data);
+        data.map(item => {
+          dispatch({
+            type: ADD_CAT_DETAILS,
+            payload: item,
+          });
+        });
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    setCatArray(state.catArray);
+  }, [state]);
   useEffect(() => {
     let filteredArray;
 
     if (keyword === null || keyword?.trim() === '') {
-      filteredArray = CAT_ARRAY;
+      filteredArray = catArray;
     } else {
-      filteredArray = CAT_ARRAY.filter(
+      filteredArray = catArray.filter(
         item => item.catName.includes(keyword) || item.breed.includes(keyword),
       );
     }
@@ -57,7 +81,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <BlankPage>
-      {CAT_ARRAY.length === 0 ? (
+      {catArray.length === 0 ? (
         <EmptyList navigation={navigation} />
       ) : (
         <View style={styles.container}>
