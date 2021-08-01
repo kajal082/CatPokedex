@@ -2,7 +2,7 @@
 import React from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
-import {BEIGE_DARK} from '../../constants/colors';
+import {BEIGE_DARK, BEIGE_DARK_EST, TEXT_COLOR} from '../../constants/colors';
 import CustomText from '../CustomText';
 
 const TextField = ({
@@ -24,6 +24,7 @@ const TextField = ({
           style={[styles.textInputStyle, customTextInputStyle]}
           placeholder={placeholder}
           numberOfLines={1}
+          placeholderTextColor={BEIGE_DARK_EST}
           {...props}
         />
       </View>
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
   },
   textInputStyle: {
     height: 37,
+    color: TEXT_COLOR,
   },
   titleStyle: {
     marginBottom: 8,

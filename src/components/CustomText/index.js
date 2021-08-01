@@ -31,7 +31,6 @@ CustomText.defaultProps = {};
 
 const styles = StyleSheet.create({
   headerFont: {
-    fontStyle: 'normal',
     fontWeight: '700',
     fontSize: 18,
     color: TEXT_COLOR,
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
 
   subHeaderFont: {
     fontStyle: 'normal',
-    fontWeight: '600',
+    fontWeight: '700',
     fontSize: 16,
     color: TEXT_COLOR,
   },

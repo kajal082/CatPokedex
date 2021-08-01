@@ -1,15 +1,16 @@
 // @flow
 import React, {useState} from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import PropTypes from 'prop-types';
 import CustomText from '../../../components/CustomText';
 import BlankPage from '../../../components/BlankPage';
-import {BEIGE} from '../../../constants/colors';
+import {BEIGE, TEXT_COLOR_DARK} from '../../../constants/colors';
 import TextField from '../../../components/TextField';
 import Button from '../../../components/Button';
 import {useDispatch} from 'react-redux';
 import {ADD_CAT_DETAILS} from '../../../constants/actions';
-
+import {ChevronLeftIcon} from 'react-native-heroicons/solid';
+import {v4 as uuid} from 'uuid';
 const FormScreen = ({navigation}) => {
   const [catDetails, setDetails] = useState({});
   const dispatch = useDispatch();
@@ -19,10 +20,7 @@ const FormScreen = ({navigation}) => {
   };
 
   const addCatDetails = () => {
-    catDetails['id'] = Math.random()
-      .toString(36)
-      .replace(/[^a-z]+/g, '')
-      .substr(2, 10);
+    catDetails.id = uuid();
     if (
       catDetails &&
       catDetails?.catName &&
@@ -43,6 +41,15 @@ const FormScreen = ({navigation}) => {
 
   return (
     <BlankPage>
+      <TouchableOpacity
+        style={{
+          alignSelf: 'flex-start',
+          marginLeft: 16,
+          marginTop: 18,
+        }}
+        onPress={() => navigation.goBack()}>
+        <ChevronLeftIcon height={36} width={36} color={TEXT_COLOR_DARK} />
+      </TouchableOpacity>
       <View style={styles.parent}>
         <CustomText.Header style={styles.header}>Add a cat</CustomText.Header>
         <View style={styles.fieldContainer}>
@@ -76,7 +83,6 @@ const FormScreen = ({navigation}) => {
         </View>
         <View style={styles.buttonBar}>
           <Button title={'Add'} onPress={addCatDetails} />
-          <Button title={'back'} onPress={() => navigation.goBack()} />
         </View>
       </View>
     </BlankPage>
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
     backgroundColor: BEIGE,
     height: '100%',
     padding: 24,
+    paddingTop: 16,
   },
   header: {
     fontSize: 24,

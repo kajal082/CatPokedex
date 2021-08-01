@@ -6,6 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 
 import ListItem from '../../components/ListItem/index.js';
@@ -13,6 +14,7 @@ import CustomText from '../../components/CustomText/index.js';
 import {
   BEIGE,
   BEIGE_DARK,
+  TEXT_COLOR,
   TEXT_COLOR_LIGHT,
 } from '../../constants/colors/index.js';
 import {CAT_ARRAY, CAT_BREED} from './constants.js';
@@ -22,8 +24,13 @@ import EmptyList from './components/EmptyList/index.js';
 import BlankPage from '../../components/BlankPage/index.js';
 import {useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-import {ADD_CAT_DETAILS} from '../../constants/actions/index.js';
+import {
+  ADD_CAT_DETAILS,
+  SET_ALL_CAT_DATA,
+} from '../../constants/actions/index.js';
 
+import {PlusIcon} from 'react-native-heroicons/solid';
+import NewCatCard from '../../components/NewCatCard/index.js';
 const Header = ({onSearch}) => {
   return (
     <View style={styles.headerStyle}>
@@ -38,67 +45,93 @@ const Header = ({onSearch}) => {
 };
 
 const HomeScreen = ({navigation}) => {
-  const [catArray, setCatArray] = useState([]);
   const [keyword, setKeyword] = useState(null);
-  const state = useSelector(state => state);
+  const allCatsArray = useSelector(state => state.catArray);
+  const [filteredCatArray, setFilteredCatArray] = useState(allCatsArray);
+  const [isReady, setIsReady] = useState(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    AsyncStorage.getItem('localCatList').then(res => {
-      if (res) {
-        let data = JSON.parse(res);
+    if (allCatsArray.length > 0) {
+      setFilteredCatArray(allCatsArray);
+      return;
+    }
 
-        setCatArray(data);
-        data.map(item => {
+    AsyncStorage.getItem('localCatList')
+      .then(res => {
+        if (res) {
+          let data = JSON.parse(res);
           dispatch({
-            type: ADD_CAT_DETAILS,
-            payload: item,
+            type: SET_ALL_CAT_DATA,
+            payload: data,
           });
-        });
-      }
-    });
-  }, []);
+        }
+      })
+      .finally(() => {
+        setIsReady(true);
+      });
+  }, [allCatsArray]);
 
-  useEffect(() => {
-    setCatArray(state.catArray);
-  }, [state]);
   useEffect(() => {
     let filteredArray;
 
     if (keyword === null || keyword?.trim() === '') {
-      filteredArray = catArray;
+      filteredArray = allCatsArray;
     } else {
-      filteredArray = catArray.filter(
+      filteredArray = filteredCatArray.filter(
         item => item.catName.includes(keyword) || item.breed.includes(keyword),
       );
     }
-    setCatArray(filteredArray);
+    setFilteredCatArray(filteredArray);
   }, [keyword]);
 
   const onSearch = text => {
     setKeyword(text);
   };
 
+  if (!isReady) {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator animating={true} size={'large'} color={TEXT_COLOR} />
+      </View>
+    );
+  }
+
   return (
     <BlankPage>
-      {catArray.length === 0 ? (
+      {allCatsArray.length === 0 ? (
         <EmptyList navigation={navigation} />
       ) : (
         <View style={styles.container}>
-          <Button.FAB
-            title={'Add a cat 😻'}
+          {/* <Button.FAB
+            title={'Add a cat'}
             onPress={() => navigation.navigate('FormScreen')}
-          />
-
+            leftIcon={<PlusIcon height={24} width={24} color={BEIGE} />}
+          /> */}
           <FlatList
             numColumns={2}
             ListHeaderComponent={<Header onSearch={onSearch} />}
-            data={catArray}
+            data={[{id: -1}, ...filteredCatArray]}
             contentContainerStyle={{
               padding: 12,
             }}
             renderItem={({item}) => {
-              return <ListItem {...item} />;
+              if (item.id === -1) {
+                return (
+                  <NewCatCard
+                    onPress={() => navigation.navigate('FormScreen')}
+                  />
+                );
+              }
+              return (
+                <ListItem
+                  {...item}
+                  onPress={() =>
+                    navigation.navigate('DetailsScreen', {...item})
+                  }
+                />
+              );
             }}
           />
         </View>
@@ -122,7 +155,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
   },
 
-  headerFontStyle: {fontSize: 36, color: TEXT_COLOR_LIGHT},
+  headerFontStyle: {fontSize: 28, color: TEXT_COLOR, marginBottom: 16},
 
   searchbarContainer: {
     marginVertical: 12,

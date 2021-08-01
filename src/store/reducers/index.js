@@ -1,4 +1,4 @@
-import {ADD_CAT_DETAILS} from '../../constants/actions';
+import {ADD_CAT_DETAILS, SET_ALL_CAT_DATA} from '../../constants/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
 const Reducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_CAT_DETAILS:
+      console.log('Adding cat details');
       let newList = [...state.catArray];
       if (action.payload) {
         newList.push(action.payload);
@@ -23,6 +24,11 @@ const Reducer = (state = initialState, action) => {
         catArray: newList,
       };
 
+    case SET_ALL_CAT_DATA:
+      return {
+        ...state,
+        catArray: action.payload,
+      };
     default:
       return state;
   }

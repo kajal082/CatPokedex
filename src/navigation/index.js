@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from '../screens/home-screen';
 import FormScreen from '../screens/form-screen/FormScreen';
+import DetailsScreen from '../screens/DetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,11 @@ const NavigationScreen = () => {
         <Stack.Screen
           name="FormScreen"
           component={FormScreen}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="DetailsScreen"
+          component={DetailsScreen}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

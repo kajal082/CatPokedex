@@ -2,18 +2,26 @@
 import React from 'react';
 import {View, StyleSheet, TextInput} from 'react-native';
 import PropTypes from 'prop-types';
-import {BEIGE_DARK, PURE_WHITE} from '../../constants/colors';
+import {
+  BEIGE_DARK,
+  BEIGE_DARK_EST,
+  PURE_WHITE,
+  TEXT_COLOR,
+  TEXT_COLOR_DARK,
+} from '../../constants/colors';
 import CustomText from '../CustomText';
+import {SearchIcon} from 'react-native-heroicons/solid';
 
 const SearchBar = ({onTextChange, value}) => {
   return (
     <View style={styles.parent}>
-      <CustomText style={styles.iconStyle}>🔎</CustomText>
+      <SearchIcon color={TEXT_COLOR_DARK} style={{marginRight: 8}} />
       <TextInput
         placeholder={'Search for cats, breeds...'}
         style={styles.textInputStyle}
         value={value}
         onChangeText={onTextChange}
+        placeholderTextColor={BEIGE_DARK_EST}
       />
     </View>
   );
@@ -35,6 +43,8 @@ const styles = StyleSheet.create({
 
   textInputStyle: {
     height: 42,
+    width: '100%',
+    color: TEXT_COLOR,
   },
 
   iconStyle: {
