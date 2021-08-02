@@ -6,12 +6,13 @@ import {PURE_WHITE, TALC_BLUE} from '../../constants/colors';
 import CustomText from '../CustomText';
 import FAB from './FAB';
 
-const Button = ({title, onPress, style, textStyle, ...props}) => {
+const Button = ({title, onPress, style, textStyle, leftIcon, ...props}) => {
   return (
     <TouchableOpacity
       style={styles.parent}
       onPress={onPress}
       activeOpacity={0.7}>
+      {leftIcon ? <View style={{marginRight: 8}}>{leftIcon}</View> : null}
       <CustomText.SubHeader style={[styles.buttonTextStyle, textStyle]}>
         {title}
       </CustomText.SubHeader>
@@ -39,7 +40,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'baseline',
     borderRadius: 12,
     flexDirection: 'row',
   },
